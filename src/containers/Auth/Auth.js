@@ -8,10 +8,10 @@ import classes from './Auth.module.css'
 class Auth extends Component {
     state = {
         controls: {
-            name: {
+            email: {
                 elementType: 'input',
                 elementConfig: {
-                    type: 'text',
+                    type: 'email',
                     placeholder: 'Mail Address'
                 },
                 value: '',
@@ -35,14 +35,12 @@ class Auth extends Component {
                 },
                 valid: false,
                 touched: false
-            },
-
-        },
+            }
+        }
     }
 
     checkValidity(value, rules) {
         let isValid = true;
-        
         if (!rules) {
             return true;
         }
@@ -85,34 +83,40 @@ class Auth extends Component {
         this.setState({controls: updatedControls});
     }
 
+    submitHandler = (event) => {
+        event.preventDefault();
+        this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value);
+    }
+
     render () {
         const formElementsArray = [];
-        for (let key in this.state.controls) {
-            formElementsArray.push({
+        for ( let key in this.state.controls ) {
+            formElementsArray.push( {
                 id: key,
                 config: this.state.controls[key]
-            });
+            } );
         }
 
-        const form = formElementsArray.map(formElement => (
-            <Input 
-                key ={formElement.id}
+        const form = formElementsArray.map( formElement => (
+            <Input
+                key={formElement.id}
                 elementType={formElement.config.elementType}
                 elementConfig={formElement.config.elementConfig}
-                value={formElement.config.value} 
+                value={formElement.config.value}
                 invalid={!formElement.config.valid}
                 shouldValidate={formElement.config.validation}
-                changed={( event ) => this.inputChangedHandler(event, formElement.id)}
-            />
-        ));
+                touched={formElement.config.touched}
+                changed={( event ) => this.inputChangedHandler( event, formElement.id )} />
+        ) );
+
         return (
             <div className={classes.Auth}>
-                <form>
+                <form onSubmit={this.submitHandler}>
                     {form}
-                    <Button btnType="Success">SUBMIT</Button>             
+                    <Button btnType="Success">SUBMIT</Button>
                 </form>
             </div>
-        )          
+        );
     }
 }
 
