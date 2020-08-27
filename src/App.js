@@ -7,6 +7,8 @@ import Checkout from './containers/Checkout/Checkout';
 import Orders from './containers/Orders/Orders';
 import Auth from './containers/Auth/Auth';
 
+console.log(process.env.REACT_APP_FIREBASE_KEY)
+
 class App extends Component {
   render () {
     return (
